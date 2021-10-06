@@ -1,0 +1,354 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "owu-apr21-kostiv",
+    "version": "0.0.1",
+    "description": "Hello world!",
+    "contact": {
+      "name": "Olha Kostiv",
+      "email": "oljakostivv@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "getAllUsers",
+        "description": "Get all users",
+        "parameters": [
+          {
+            "name": "perPage",
+            "in": "query",
+            "default": 5,
+            "type": "number",
+            "description": "List of all users"
+          },
+          {
+            "name": "avatar",
+            "in": "formData",
+            "type": "file",
+            "description": "User avatar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All users info arr",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/singleUser"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Email or password is wrong"
+                },
+                "code": {
+                  "description": "Custom code",
+                  "example": 404,
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "description": "Create user",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "default": "Mike",
+            "description": "User name"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "default": "mike@example.com",
+            "type": "string",
+            "description": "User email"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "default": "Mike123!"
+          },
+          {
+            "name": "role",
+            "in": "formData",
+            "type": "string",
+            "default": "user"
+          },
+          {
+            "name": "born_year",
+            "in": "formData",
+            "type": "number",
+            "default": 1996
+          },
+          {
+            "name": "avatar",
+            "in": "formData",
+            "type": "file",
+            "example": "some_photo-5657887_1280.jpg"
+          },
+          {
+            "name": "isActivated",
+            "in": "formData",
+            "required": true,
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Create user success",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "operationId": "updateUser",
+        "description": "Update user",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjM3NzYxNDYsImV4cCI6MTYyMzc3Njc0Nn0.BxrhEqOQ7JwlPQ5K5bsi_2Iai8aX4yigzHtU66sdbNE"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "12345abc1235633tto999pr",
+            "description": "User ID"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "example": "User",
+            "description": "User name"
+          },
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string",
+            "example": "email@expamle.com",
+            "description": "User email"
+          },
+          {
+            "name": "role",
+            "in": "formData",
+            "type": "string",
+            "example": "user"
+          },
+          {
+            "name": "born_year",
+            "in": "formData",
+            "type": "number",
+            "example": 1996
+          },
+          {
+            "name": "avatar",
+            "in": "formData",
+            "type": "file",
+            "example": "updated_photo-5657887_1280.jpg"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Update user success",
+            "schema": {
+              "$ref": "#/definitions/singleUser"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/errorSchema"
+            }
+          }
+        }
+      }
+    },
+
+    "/auth": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "createAuthTokens",
+        "description": "Create authorization tokens",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "default": "Mike"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "default": "Mike123!"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Auth tokens is created",
+            "schema": {
+              "$ref": "#/definitions/o_auth"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message",
+                  "example": "Email or password is wrong"
+                },
+                "code": {
+                  "description": "Custom code",
+                  "example": 404,
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "operationId": "createNewAuthTokens",
+        "description": "Create new authorization tokens",
+        "parameters":[
+          {
+            "name": "refresh_token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzE4OTI2ODAsImV4cCI6MTYzMTg5MzU4MH0.s6kXrGc2u3mEix7MQPPXsFRVMidSkbtcSTwSwVpfypQ"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Auth tokens is created",
+            "schema": {
+              "$ref": "#/definitions/o_auth"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "description": "Error message",
+                  "type": "string",
+                  "example": "Not valid refresh token"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+},
+  "definitions": {
+    "errorSchema": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "description": "Error message",
+          "type": "string",
+          "example": "Not valid request!"
+        },
+        "code": {
+          "description": "Custom code",
+          "example": 404,
+          "type": "number"
+        }
+      }
+    },
+    "singleUser": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "description": "User ID",
+          "example": "888_22asd"
+        },
+        "name": {
+          "description": "User name",
+          "type": "string",
+          "example": "Mike"
+        },
+        "email": {
+          "description": "User email",
+          "type": "string",
+          "example": "mike@example.com"
+        }
+      }
+    },
+    "o_auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "sting",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzE4OTI2ODAsImV4cCI6MTYzMTg5MzU4MH0.s6kXrGc2u3mEix7MQPPXsFRVMidSkbtcSTwSwVpfypQ"
+        },
+        "refresh_token": {
+          "type": "sting",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzE4OTI2ODAsImV4cCI6MTYzMTg5MzU4MH0.s6kXrGc2u3mEix7MQPPXsFRVMidSkbtcSTwSwVpfypQ"
+        }
+      }
+    }
+  }
+}
